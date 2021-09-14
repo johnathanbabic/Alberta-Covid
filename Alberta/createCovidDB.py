@@ -3,8 +3,30 @@
 # This data will later be used to create data visualizations. 
 
 import os
+import sys
+import requests
 import sqlite3 as sql
 import pandas as pd
+
+def get_data_from_web(url):
+    file_name = get_filename(url)
+    if os.path.exists(file_name):
+        os.remove(file_name)
+        download_file(url)
+    else:
+        download_file(url)
+
+def download_file(url):
+    local_filename = get_filename(url)
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(local_filename, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192): 
+                f.write(chunk)
+
+def get_filename(url):
+    local_filename = url.split('/')[-1]
+    return local_filename
 
 def connect_to_db():
     try: 
@@ -89,6 +111,8 @@ def insert_vaccine_data(vaccines, cursor):
 
 
 def main():
+    get_data_from_web("https://www.alberta.ca/data/stats/covid-19-alberta-statistics-data.csv")
+    get_data_from_web("https://www.alberta.ca/data/stats/lga-coverage.csv")
     con,cur = connect_to_db()
     covid,vaccines = get_data()
     covid, vaccines = clean_data(covid, vaccines)
