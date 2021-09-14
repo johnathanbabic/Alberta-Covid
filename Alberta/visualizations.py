@@ -30,7 +30,7 @@ def cases_by_age(cursor):
     script = "select * from age_groups;"
     cursor.execute(script)
     output = cursor.fetchall()
-    sequence = ["Under","1-4","5-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80+","Unknown"]
+    sequence = ["Under","1-4","5-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80+"]
     data = []
     for entry in output:
         new_value = list(entry)
@@ -49,53 +49,50 @@ def cases_by_age(cursor):
                 total += entry[2]
                 totalActive += entry[1]
     
-    
 
     labels = list(data_dict.keys())
     active = []
     totals = []
     recovery = []
     death = []
+   
 
     for item in data_dict:
-        active.append((int(data_dict[item][0])/totalActive)*100)
-        totals.append((int(data_dict[item][1])/total)*100)
-        recovery.append(int(data_dict[item][-2])*100)
-        death.append(int(data_dict[item][-1])*100)
+        active.append(data_dict[item][0])
+        totals.append(data_dict[item][1])
+        recovery.append((data_dict[item][2])*100)
+        death.append((data_dict[item][-1])*100)
     
-    x = np.arange(len(labels))
-    width = 0.5
+    plt.figure(figsize=(18,10))
+    plt.subplot(2,2,1)
+    plt.bar(labels,active)
+    plt.title("Active Cases by Age Group")
+    plt.ylabel("Number of Cases")
+    plt.xlabel("Age group (years)")
+    plt.ylim([0,20])
 
-    ###### figure 1
+    plt.subplot(2,2,2)
+    plt.bar(labels,totals)
+    plt.title("Total Cases by Age Group")
+    plt.ylabel("Number of Cases")
+    plt.xlabel("Age group (years)")
+    plt.ylim([0,20])
 
-    fig, ax = plt.subplots()
-    rect1 = ax.bar(x - width/2, active, width, label="Active Cases")
-    rect2 = ax.bar(x + width/2, totals, width, label="Total Cases")
+    plt.subplot(2,2,3)
+    plt.bar(labels,totals)
+    plt.title("Recovery Rate by Age Group")
+    plt.ylabel("Rate (%)")
+    plt.xlabel("Age group (years)")
+    plt.ylim([0,100])
 
-    ax.set_ylabel("Percentage")
-    ax.set_title("Active and Total Cases by Age Group")
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-    ax.legend()
+    plt.subplot(2,2,4)
+    plt.bar(labels,totals)
+    plt.title("Death Rate by Age Group")
+    plt.ylabel("Rate (%)")
+    plt.xlabel("Age group (years)")
+    plt.ylim([0,100])
 
-    fig.tight_layout()
     plt.show()
-
-    ##### figure 2 
-
-    fig, ax = plt.subplots()
-    rect1 = ax.bar(x - width/2, recovery, width, color = ["green"], label="Recovery Rate")
-    rect2 = ax.bar(x + width/2, totals, width, color = ["red"], label="Death Rate")
-
-    ax.set_ylabel("Percentage")
-    ax.set_title("Recovery and Death Rate by Age Group")
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-    ax.legend()
-
-    fig.tight_layout()
-    plt.show()
-
     
     return cursor
 
