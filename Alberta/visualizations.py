@@ -63,8 +63,8 @@ def cases_by_age(cursor):
     width = 0.5
 
     fig, ax = plt.subplots()
-    rect1 = ax.bar(x - width/2, active, width, label="Active Cases")
-    rect2 = ax.bar(x + width/2, totals, width, label="Total Cases")
+    rect1 = ax.bar(x - width/2, active, width*2, label="Active Cases")
+    rect2 = ax.bar(x + width/2, totals, width*2, label="Total Cases")
 
     ax.set_ylabel("Percentage")
     ax.set_title("Active and Total Cases by Age Group")
