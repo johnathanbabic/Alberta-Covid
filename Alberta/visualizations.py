@@ -54,43 +54,55 @@ def cases_by_age(cursor):
     active = []
     totals = []
     recovery = []
+    deathRate = []
     death = []
-   
 
     for item in data_dict:
         active.append(data_dict[item][0])
         totals.append(data_dict[item][1])
         recovery.append((data_dict[item][2])*100)
-        death.append((data_dict[item][-1])*100)
+        deathRate.append((data_dict[item][-1])*100)
+
+    for i in range(0,len(totals)):
+        value = (deathRate[i])/100 * totals[i]
+        death.append(value)
     
-    plt.figure(figsize=(18,10))
-    plt.subplot(2,2,1)
+
+    plt.figure(figsize=(18,10),tight_layout=True)
+    plt.subplot(3,2,1)
     plt.bar(labels,active)
     plt.title("Active Cases by Age Group")
     plt.ylabel("Number of Cases")
     plt.xlabel("Age group (years)")
-    plt.ylim([0,20])
+    plt.ylim([0,5000])
 
-    plt.subplot(2,2,2)
+    plt.subplot(3,2,2)
     plt.bar(labels,totals)
     plt.title("Total Cases by Age Group")
     plt.ylabel("Number of Cases")
     plt.xlabel("Age group (years)")
-    plt.ylim([0,20])
+    plt.ylim([0,75000])
 
-    plt.subplot(2,2,3)
-    plt.bar(labels,totals)
+    plt.subplot(3,2,3)
+    plt.bar(labels,recovery)
     plt.title("Recovery Rate by Age Group")
     plt.ylabel("Rate (%)")
     plt.xlabel("Age group (years)")
     plt.ylim([0,100])
 
-    plt.subplot(2,2,4)
-    plt.bar(labels,totals)
+    plt.subplot(3,2,4)
+    plt.bar(labels,deathRate)
     plt.title("Death Rate by Age Group")
     plt.ylabel("Rate (%)")
     plt.xlabel("Age group (years)")
-    plt.ylim([0,100])
+    plt.ylim([0,30])
+
+    plt.subplot(3,2,5)
+    plt.bar(labels,death)
+    plt.title("Deaths by Age Group")
+    plt.ylabel("Number of Deaths")
+    plt.xlabel("Age group (years)")
+    plt.ylim([0,2000])
 
     plt.show()
     
