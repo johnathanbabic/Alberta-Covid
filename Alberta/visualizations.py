@@ -1,9 +1,9 @@
 import os
 import sqlite3 as sql
 import sys
-
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 
 def connect_to_db():
@@ -64,7 +64,7 @@ def cases_by_age(cursor):
 
     fig, ax = plt.subplots()
     rect1 = ax.bar(x - width/2, active, width, label="Active Cases")
-    rect2 = ax.bar(x - width/2, totals, width, label="Total Cases")
+    rect2 = ax.bar(x + width/2, totals, width, label="Total Cases")
 
     ax.set_ylabel("Percentage")
     ax.set_title("Active and Total Cases by Age Group")
