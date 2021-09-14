@@ -97,7 +97,6 @@ def cases_by_age(cursor):
     plt.show()
 
     
-    
     return cursor
 
 
