@@ -72,11 +72,10 @@ def cases_by_age(cursor):
     ax.set_xticklabels(labels)
     ax.legend()
 
-    ax.bar_label(rect1,padding=3)
-    ax.bar_label(rect2,padding=3)
+    #ax.bar_label(rect1,padding=3)
+    #ax.bar_label(rect2,padding=3)
 
     fig.tight_layout()
-
     plt.show()
 
     recovery = []
