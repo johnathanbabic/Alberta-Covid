@@ -62,7 +62,7 @@ def cases_by_age(cursor):
     x = np.arange(len(labels))
     width = 0.5
 
-    fig, ax = plt.subplots(2,2)
+    fig, ax = plt.subplots()
     rect1 = ax.bar(x - width/2, active, width, label="Active Cases")
     rect2 = ax.bar(x + width/2, totals, width, label="Total Cases")
 
@@ -87,11 +87,12 @@ def cases_by_age(cursor):
 
 
 
-    #active vs overall
-
 
 def rates_by_age(cursor):
     # revocery and death rates ascending
+    pass
+
+def rates_by_location(cursor):
     pass
 
 
