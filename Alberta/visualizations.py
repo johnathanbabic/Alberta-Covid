@@ -69,6 +69,7 @@ def cases_by_age(cursor):
     ax.set_ylabel("Percentage")
     ax.set_title("Active and Total Cases by Age Group")
     ax.set_xticks(x)
+    ax.set_xticklabels(labels)
     ax.legend()
 
     ax.bar_label(rect1,padding=3)
