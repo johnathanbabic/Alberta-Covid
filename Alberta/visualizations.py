@@ -54,13 +54,19 @@ def cases_by_age(cursor):
     labels = list(data_dict.keys())
     active = []
     totals = []
+    recovery = []
+    death = []
 
     for item in data_dict:
         active.append((int(data_dict[item][0])/totalActive)*100)
         totals.append((int(data_dict[item][1])/total)*100)
+        recovery.append(int(data_dict[item][-2])*100)
+        death.append(int(data_dict[item][-1])*100)
     
     x = np.arange(len(labels))
     width = 0.5
+
+    ###### figure 1
 
     fig, ax = plt.subplots()
     rect1 = ax.bar(x - width/2, active, width, label="Active Cases")
@@ -72,14 +78,23 @@ def cases_by_age(cursor):
     ax.set_xticklabels(labels)
     ax.legend()
 
-    #ax.bar_label(rect1,padding=3)
-    #ax.bar_label(rect2,padding=3)
-
     fig.tight_layout()
     plt.show()
 
-    recovery = []
-    death = []
+    ##### figure 2 
+
+    fig, ax = plt.subplots()
+    rect1 = ax.bar(x - width/2, recovery, width, color = ["green"], label="Recovery Rate")
+    rect2 = ax.bar(x + width/2, totals, width, color = ["red"], label="Death Rate")
+
+    ax.set_ylabel("Percentage")
+    ax.set_title("Recovery and Death Rate by Age Group")
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.legend()
+
+    fig.tight_layout()
+    plt.show()
 
     
     
