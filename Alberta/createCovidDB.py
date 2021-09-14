@@ -9,7 +9,7 @@ import sqlite3 as sql
 import pandas as pd
 
 def get_data_from_web(url):
-    # This function check if the files exists and if so
+    # This function checks if the file exists and if so
     # it will replace them with latest data. If the file
     # does not exist it will download the data. 
     file_name = get_filename(url)
@@ -20,7 +20,7 @@ def get_data_from_web(url):
         download_file(url)
 
 def download_file(url):
-    # This function gets the url and dowloads the file
+    # This function gets the url and downloads the file.
     local_filename = get_filename(url)
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
@@ -29,13 +29,13 @@ def download_file(url):
                 f.write(chunk)
 
 def get_filename(url):
-    # This fucntion gets the file name from the url provided
+    # This function gets the file name from the url provided.
     local_filename = url.split('/')[-1]
     return local_filename
 
 def connect_to_db():
-    # This function will open the covid.db and erase data in 
-    # order to enter new updated data. If db does not exist
+    # This function will open the covid.db and erase the data 
+    # in order to enter new updated data. If db does not exist
     # it will create it and create the neccessary tables.
     try: 
         con = sql.connect("covid.db")
@@ -67,7 +67,7 @@ def clean_data(covid, vaccines):
     return covid, vaccines
 
 def insert_covid_data(covid, cursor):
-    # This function finds the inuque values for age groups, locations 
+    # This function finds the unique values for age groups, locations 
     # and genders from the data set. If then iterates over each of the 
     # unique valuees to get the active cases, total cases, recovery rate
     # and death ratet for each group. These values are then later 
