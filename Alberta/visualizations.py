@@ -60,7 +60,7 @@ def cases_by_age(cursor):
         totals.append((int(data_dict[item][1])/total)*100)
     
     x = np.arange(len(labels))
-    width = 0.35
+    width = 0.5
 
     fig, ax = plt.subplots()
     rect1 = ax.bar(x - width/2, active, width, label="Active Cases")
