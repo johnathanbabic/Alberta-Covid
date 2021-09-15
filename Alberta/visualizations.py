@@ -1,9 +1,6 @@
 import os
 import sqlite3 as sql
-import sys
-import numpy as np
 import matplotlib.pyplot as plt
-
 
 
 def connect_to_db():
@@ -27,6 +24,7 @@ def connect_to_db():
     return con,cur
 
 def by_age(cursor):
+    #extract data from the db
     script = "select * from age_groups;"
     cursor.execute(script)
     output = cursor.fetchall()
@@ -40,7 +38,7 @@ def by_age(cursor):
 
     total = 0  
     totalActive = 0
-     
+    #put data into a single dictionary
     data_dict = {}
     for age in sequence:
         for entry in data:
@@ -48,7 +46,6 @@ def by_age(cursor):
                 data_dict[age] = entry[1:]
                 total += entry[2]
                 totalActive += entry[1]
-    
 
     labels = list(data_dict.keys())
     active = []
@@ -57,6 +54,8 @@ def by_age(cursor):
     deathRate = []
     death = []
 
+    #get the data that will be used for the 
+    #graphs and put them into list
     for item in data_dict:
         active.append(data_dict[item][0])
         totals.append(data_dict[item][1])
@@ -67,7 +66,7 @@ def by_age(cursor):
         value = (deathRate[i])/100 * totals[i]
         death.append(value)
     
-
+    #create and show tables on a single page
     plt.figure(figsize=(18,10),tight_layout=True)
     plt.subplot(3,2,1)
     plt.bar(labels,active)
@@ -109,6 +108,7 @@ def by_age(cursor):
     return cursor
 
 def by_gender(cursor):
+    #get the data from the db
     script = "select * from genders;"
     cursor.execute(script)
     output = cursor.fetchall()
@@ -118,6 +118,8 @@ def by_gender(cursor):
     recoveryRate = []
     deathRate = []
     deaths = []
+    #ignore unknown gender due to lack of data
+    #get the data and put them into lists
     for item in output:
         values = list(item)
         if values[0] != "Unknown":
@@ -128,6 +130,7 @@ def by_gender(cursor):
             deathRate.append(values[4]*100)
             deaths.append(values[2]*values[4])
 
+    #create and show tables on a single page
     plt.figure(figsize=(18,10),tight_layout=True)
     plt.subplot(3,2,1)
     plt.bar(genders,activeCases)
@@ -169,6 +172,7 @@ def by_gender(cursor):
     return cursor
 
 def by_location(cursor):
+    #get the data from the db
     script = "select * from locations;"
     cursor.execute(script)
     output = cursor.fetchall()
@@ -178,6 +182,8 @@ def by_location(cursor):
     recoveryRate = []
     deathRate = []
     deaths = []
+    #get the data that will be used for the 
+    #graphs and put them into list
     for item in output:
         values = list(item)
         if values[0] != "Unknown":
@@ -188,6 +194,7 @@ def by_location(cursor):
             deathRate.append(values[4]*100)
             deaths.append(values[2]*values[4])
 
+    #create and show tables on a single page
     plt.figure(figsize=(18,10),tight_layout=True)
     plt.subplot(3,2,1)
     plt.bar(locations,activeCases)
@@ -229,9 +236,11 @@ def by_location(cursor):
     return cursor
 
 def vaccinations(cursor):
+    #extract the data from the db
     script = "select * from vacinations;"
     cursor.execute(script)
     output = cursor.fetchall()
+    #order of ages
     sequence = ["12+","12-19","20-39","50-59","60-74","75+","ALL"]
     data = []
     for entry in output:
@@ -239,15 +248,15 @@ def vaccinations(cursor):
         temp = new_value[0].split(" ")
         new_value[0] = temp[0]
         data.append(new_value)
-     
+    #put all data into dictionary
     data_dict = {}
     for age in sequence:
         for entry in data:
             if entry[0] == age:
                 data_dict[age] = entry[1:]
-    
-    print(data_dict)
 
+    #get the data that will be used for graphs and 
+    #put them into a list
     labels = list(data_dict.keys())
     partially = []
     fully = []
@@ -257,6 +266,7 @@ def vaccinations(cursor):
 
     labels = list(data_dict.keys())
 
+    #create and show the graphs on a single page
     plt.figure(figsize=(18,5),tight_layout=True)
     plt.subplot(1,2,1)
     plt.bar(labels,partially)
@@ -278,6 +288,7 @@ def vaccinations(cursor):
 
 
 def main():
+    #main function
     con, cur = connect_to_db()
     cur = by_age(cur)
     cur = by_gender(cur)
