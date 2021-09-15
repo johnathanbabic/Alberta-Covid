@@ -232,38 +232,57 @@ def vaccinations(cursor):
     script = "select * from vacinations;"
     cursor.execute(script)
     output = cursor.fetchall()
-    sequence = ["Under","1-4","5-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80+"]
+    sequence = ["12+","12-19","20-39","50-59","60-74","75+","ALL"]
     data = []
     for entry in output:
         new_value = list(entry)
         temp = new_value[0].split(" ")
         new_value[0] = temp[0]
         data.append(new_value)
-
-    total = 0  
-    totalActive = 0
      
     data_dict = {}
     for age in sequence:
         for entry in data:
             if entry[0] == age:
                 data_dict[age] = entry[1:]
-                total += entry[2]
-                totalActive += entry[1]
     
+    print(data_dict)
 
     labels = list(data_dict.keys())
-    active = []
-    totals = []
-    recovery = []
-    deathRate = []
-    death = []
+    partially = []
+    fully = []
+    for item in data_dict:
+        partially.append(data_dict[item][1]*100)
+        fully.append(data_dict[item][-1]*100)
+
+    labels = list(data_dict.keys())
+
+    plt.figure(figsize=(18,5),tight_layout=True)
+    plt.subplot(1,2,1)
+    plt.bar(labels,partially)
+    plt.title("Vacination Rates by Age Group (1 Dose)")
+    plt.ylabel("Population who received at least one dose %")
+    plt.xlabel("Age group (years)")
+    plt.ylim([0,100])
+
+    plt.subplot(1,2,2)
+    plt.bar(labels,fully)
+    plt.title("Vacination Rates by Age Group (Fully immunized)")
+    plt.ylabel("Population fully immunized (%)")
+    plt.xlabel("Age group (years)")
+    plt.ylim([0,100])
+
+    plt.show()
+    return cursor
+
+
 
 def main():
     con, cur = connect_to_db()
-    #cur = by_age(cur)
-    #cur = by_gender(cur)
+    cur = by_age(cur)
+    cur = by_gender(cur)
     cur = by_location(cur)
+    cur = vaccinations(cur)
     con.commit()
     con.close()
 
